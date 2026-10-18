@@ -6,6 +6,17 @@ const get=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v??d}ca
 const set=(k,v)=>localStorage.setItem(k,JSON.stringify(v));
 const find=s=>STOCKS.find(x=>x.sym===s)||STOCKS[0];
 const q=new URLSearchParams(location.search);
+const P={home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+discover:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5z"/>',
+portfolio:'<path d="M21 12A9 9 0 1 1 12 3v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/>',
+watchlist:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',
+activity:'<path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>',
+leaderboard:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 6H4v1a3 3 0 0 0 3 3M17 6h3v1a3 3 0 0 1-3 3"/>',
+learn:'<path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v17H6.5A2.5 2.5 0 0 0 4 21.5z"/><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>',
+wallet:'<path d="M3 7a2 2 0 0 1 2-2h13v4"/><path d="M3 7v11a2 2 0 0 0 2 2h15V9H5a2 2 0 0 1-2-2z"/><circle cx="16.5" cy="14.5" r="1"/>',
+trend:'<path d="m3 17 6-6 4 4 8-8"/><path d="M15 7h6v6"/>',
+layers:'<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>'};
+const I=n=>`<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${P[n]}</svg>`;
 function get_t(){try{return JSON.parse(sessionStorage.getItem('ss_trade'))}catch{return null}}
 
 function spark(d,fill,cn='spark'){const w=300,h=60,mn=Math.min(...d),mx=Math.max(...d);
@@ -13,7 +24,7 @@ function spark(d,fill,cn='spark'){const w=300,h=60,mn=Math.min(...d),mx=Math.max
  const c=d[d.length-1]>=d[0]?'var(--up)':'var(--down)';
  return `<svg class="${cn}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">${fill?`<path d="${L}L${w} ${h}L0 ${h}Z" fill="${c}" opacity=".15"/>`:''}<path d="${L}" fill="none" stroke="${c}" stroke-width="2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/></svg>`}
 const card=s=>`<a class="card sc" href="stock.html?s=${s.sym}"><div class="sc-top"><div><div class="sym">${s.sym}</div><div class="nm">${s.name}</div></div><span class="pill ${cls(s.chg)}">${pct(s.chg)}</span></div><div class="price">${inr(s.price)}</div>${spark(s.data)}</a>`;
-const stat=(l,v,c='')=>`<div class="card stat"><small>${l}</small><b class="${c}">${v}</b></div>`;
+const stat=(l,v,c='',ic='wallet')=>`<div class="card stat"><span class="ico">${I(ic)}</span><small>${l}</small><b class="${c}">${v}</b></div>`;
 const head=(t,p,x='')=>`<div class="head"><div><h1>${t}</h1><p>${p}</p></div>${x}</div>`;
 const txns=()=>[...get('ss_txns',[]),...TXNS];
 const holdings=()=>{const m={};HOLDINGS.forEach(h=>m[h.sym]={...h});
@@ -27,9 +38,9 @@ const toast=m=>{const t=document.createElement('div');t.className='toast';t.text
 
 const LINKS=[['home','Home'],['discover','Discover'],['portfolio','Portfolio'],['watchlist','Watchlist'],['activity','Activity'],['leaderboard','Leaderboard'],['learn','Learn']];
 function nav(p){const t=STOCKS.map(s=>`<span>${s.sym} <b class="${cls(s.chg)}">${pct(s.chg)}</b></span>`).join('');
- return `<header class="nav"><div class="nav-in"><a class="logo" href="home.html"><i>↗</i>StockSim</a><nav class="links">${LINKS.map(([k,l])=>`<a href="${k}.html" class="${p===k?'on':''}">${l}</a>`).join('')}</nav><a href="profile.html" class="avatar" title="Profile">${USER.name[0]}</a></div><div class="ticker"><div class="ticker-t">${t}${t}</div></div></header>`}
+ return `<header class="nav"><div class="nav-in"><a class="logo" href="home.html"><i>${I('trend')}</i>StockSim</a><nav class="links">${LINKS.map(([k,l])=>`<a href="${k}.html" class="${p===k?'on':''}">${I(k)}${l}</a>`).join('')}</nav><a href="profile.html" class="avatar" title="Profile">${USER.name[0]}</a></div><div class="ticker"><div class="ticker-t">${t}${t}</div></div></header>`}
 
-const authArt=`<div class="auth-art"><a class="logo" href="login.html"><i>↗</i>StockSim</a><div><h1>Practice investing.<br>Zero risk, real learning.</h1><p style="margin-top:14px;max-width:380px">₹10,00,000 virtual cash se shuru karo, trades lagao aur leaderboard pe chadho.</p></div>${spark(STOCKS[6].data,true)}<span class="muted">Virtual money only. Koi real paisa involve nahi.</span></div>`;
+const authArt=`<div class="auth-art"><a class="logo" href="login.html"><i>${I('trend')}</i>StockSim</a><div><h1>Practice investing.<br>Zero risk, real learning.</h1><p style="margin-top:14px;max-width:380px">₹10,00,000 virtual cash se shuru karo, trades lagao aur leaderboard pe chadho.</p></div>${spark(STOCKS[6].data,true)}<span class="muted">Virtual money only. Koi real paisa involve nahi.</span></div>`;
 const authForm=(t,sub,fields,btn,alt)=>`<div class="auth">${authArt}<div class="auth-form"><form id="af"><h1 style="font-size:2rem">${t}</h1><p>${sub}</p>${fields}<button class="btn full" style="margin-top:22px">${btn}</button><p style="margin-top:18px;text-align:center">${alt}</p></form></div></div>`;
 const f=(l,t,n,ph='',x='')=>`<label for="${n}">${l}</label><input id="${n}" type="${t}" placeholder="${ph}" ${x} required>`;
 
@@ -37,8 +48,8 @@ const R={
 login:()=>authForm('Welcome back','Apne account mein login karo.',f('Email','email','em','you@example.com')+f('Password','password','pw'),'Log in','Naye ho? <a class="up" href="signup.html">Create an account</a>'),
 signup:()=>authForm('Create your account','Free hai, 30 second lagenge.',f('Full name','text','nm','Safiya Karim')+f('Email','email','em','you@example.com')+f('Password','password','pw','Min 8 characters'),'Start with ₹10,00,000','Already have an account? <a class="up" href="login.html">Log in</a>'),
 home(){const pv=invested(),tot=pv+cash(),pl=plTotal(),mv=[...STOCKS].sort((a,b)=>b.chg-a.chg);
- return `<div class="hero"><p>Namaste, ${USER.name.split(' ')[0]}. Aapka net worth</p><div class="big">${inr0(tot)}</div><span class="pill ${cls(pl)}">${pl>=0?'▲':'▼'} ${inr0(Math.abs(pl))} overall P&amp;L</span><div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="discover.html">Find a stock</a><a class="btn ghost" href="portfolio.html">View portfolio</a></div>${spark(STOCKS[0].data,true)}</div>
- <div class="grid g4 sec">${stat('Cash available',inr0(cash()))}${stat('Invested',inr0(pv))}${stat('Holdings',holdings().length+' stocks')}${stat('Leaderboard rank','#3','up')}</div>
+ return `<div class="hero"><p>Namaste, ${USER.name.split(' ')[0]}. Aapka net worth</p><div class="big">${inr0(tot)}</div><span class="pill ${cls(pl)}">${pl>=0?'▲':'▼'} ${inr0(Math.abs(pl))} overall P&amp;L</span><div style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn" href="discover.html">${I('discover')}Find a stock</a><a class="btn ghost" href="portfolio.html">View portfolio</a></div>${spark(STOCKS[0].data,true)}</div>
+ <div class="grid g4 sec">${stat('Cash available',inr0(cash()),'','wallet')}${stat('Invested',inr0(pv),'','trend')}${stat('Holdings',holdings().length+' stocks','','layers')}${stat('Leaderboard rank','#3','up','leaderboard')}</div>
  <div class="sec"><h2>Top gainers today</h2><div class="grid g4">${mv.slice(0,4).map(card).join('')}</div></div>
  <div class="sec"><h2>Biggest drops</h2><div class="grid g4">${mv.slice(-4).reverse().map(card).join('')}</div></div>`},
 discover(){const secs=['All',...new Set(STOCKS.map(s=>s.sector))];
@@ -63,8 +74,8 @@ trade_review(){const t=get_t();if(!t)return R.error();const sub=t.qty*t.price,fe
   set('ss_cash',cash()+(t.side==='BUY'?-tot:tot));location.href='trade_done.html'});
  return `<div class="center" style="text-align:left"><h1>Review your order</h1><p style="margin:6px 0 20px">Confirm karne se pehle ek baar dekh lo.</p><div class="card"><div class="row"><span class="muted">Action</span><b class="${t.side==='BUY'?'up':'down'}">${t.side}</b></div><div class="row"><span class="muted">Stock</span><b>${t.sym}</b></div><div class="row"><span class="muted">Quantity</span><b>${t.qty}</b></div><div class="row"><span class="muted">Price per share</span><b>${inr(t.price)}</b></div><div class="row"><span class="muted">Fee (0.1%)</span><b>${inr(fee)}</b></div><div class="row"><span>Total</span><b style="font-size:1.3rem">${inr(tot)}</b></div></div><div style="display:flex;gap:10px;margin-top:18px"><a class="btn ghost" href="stock.html?s=${t.sym}">Edit</a><button class="btn full ${t.side==='BUY'?'buy':'sell'}" id="ok">Confirm ${t.side.toLowerCase()}</button></div></div>`},
 trade_done(){const t=get_t();return `<div class="center"><div class="tick">✓</div><h1>Order placed</h1><p style="margin:10px 0 26px">${t?`${t.side==='BUY'?'Bought':'Sold'} ${t.qty} × ${t.sym} at ${inr(t.price)}.`:'Aapka order execute ho gaya.'}</p><div style="display:flex;gap:10px;justify-content:center"><a class="btn" href="portfolio.html">View portfolio</a><a class="btn ghost" href="discover.html">Keep exploring</a></div></div>`},
-portfolio(){const H=holdings(),cols=['#ffb547','#a78bfa','#2dd4a7','#ff6b7a','#6ea8ff'],tot=invested()||1;
- return head('Portfolio','Aapke saare holdings ek jagah.')+`<div class="grid g4">${stat('Current value',inr0(invested()))}${stat('Cash',inr0(cash()))}${stat('Total P&L',inr0(plTotal()),cls(plTotal()))}</div>
+portfolio(){const H=holdings(),cols=['#ff9aa8','#b79cff','#6fd8b0','#ffcf6b','#7cc4ff'],tot=invested()||1;
+ return head('Portfolio','Aapke saare holdings ek jagah.')+`<div class="grid g4">${stat('Current value',inr0(invested()),'','portfolio')}${stat('Cash',inr0(cash()),'','wallet')}${stat('Total P&L',inr0(plTotal()),cls(plTotal()),'trend')}</div>
  <div class="card sec"><h2>Allocation</h2><div class="bar">${H.map((h,i)=>`<span title="${h.sym}" style="width:${h.qty*find(h.sym).price/tot*100}%;background:${cols[i%5]}"></span>`).join('')}</div><div style="display:flex;gap:16px;flex-wrap:wrap">${H.map((h,i)=>`<span class="muted"><b style="color:${cols[i%5]}">●</b> ${h.sym}</span>`).join('')}</div></div>
  <div class="card sec tw"><table><tr><th>Stock</th><th class="r">Qty</th><th class="r">Avg price</th><th class="r">LTP</th><th class="r">P&amp;L</th></tr>${H.map(h=>{const s=find(h.sym),p=(s.price-h.avg)*h.qty;return `<tr><td><a href="stock.html?s=${s.sym}"><b>${s.sym}</b><br><span class="nm">${s.name}</span></a></td><td class="r">${h.qty}</td><td class="r">${inr(h.avg)}</td><td class="r">${inr(s.price)}</td><td class="r ${cls(p)}"><b>${inr0(p)}</b><br>${pct((s.price/h.avg-1)*100)}</td></tr>`}).join('')}</table></div>`},
 watchlist(){const l=get('ss_watch',['TCS','ZOMATO','ITC']).map(find);

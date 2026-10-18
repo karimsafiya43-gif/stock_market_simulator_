@@ -1,5 +1,5 @@
 // Mock data: backend ready hone par real fetch() se replace karna
-function series(seed,base,n=40){let x=seed,v=base*.9,o=[];for(let i=0;i<n;i++){x=(x*9301+49297)%233280;v+=(x/233280-.45)*base*.022;o.push(v)}o[n-1]=base;return o}
+function series(seed,base,n=40){let x=seed,v=base*.9,o=[];for(let i=0;i<n;i++){x=(x*9301+49297)%233280;v+=(x/233280-.45)*base*.022;o.push(v)}const d=base-o[n-1];return o.map(v=>v+d)}
 const _s=(sym,name,sector,price,chg,seed)=>({sym,name,sector,price,chg,data:series(seed,price)});
 const STOCKS=[
  _s('RELIANCE','Reliance Industries','Energy',2874.5,1.24,11),_s('TCS','Tata Consultancy','IT',3921.1,-0.62,23),
