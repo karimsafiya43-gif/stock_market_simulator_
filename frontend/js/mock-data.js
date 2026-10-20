@@ -1,0 +1,78 @@
+// Mock data: replace with real fetch() calls once the backend is ready
+function series(seed,base,n=40){let x=seed,v=base*.9,o=[];for(let i=0;i<n;i++){x=(x*9301+49297)%233280;v+=(x/233280-.45)*base*.022;o.push(v)}const d=base-o[n-1];return o.map(v=>v+d)}
+const _s=(sym,name,sector,price,chg,seed)=>({sym,name,sector,price,chg,data:series(seed,price)});
+const STOCKS=[
+ _s('RELIANCE','Reliance Industries','Energy',2874.5,1.24,11),_s('TCS','Tata Consultancy','IT',3921.1,-0.62,23),
+ _s('INFY','Infosys','IT',1544.8,0.88,37),_s('HDFCBANK','HDFC Bank','Banking',1689.3,0.31,41),
+ _s('ITC','ITC Limited','FMCG',468.2,-0.45,53),_s('TATAMOTORS','Tata Motors','Auto',972.6,2.17,67),
+ _s('ZOMATO','Zomato','Consumer',238.9,3.42,71),_s('SBIN','State Bank of India','Banking',812.4,-1.08,83),
+ _s('WIPRO','Wipro','IT',498.7,0.12,97),_s('ADANIENT','Adani Enterprises','Energy',2456.0,-2.31,101)];
+const USER={name:'Safiya Karim',username:'safiya',email:'safiya@example.com',balance:742500,joined:'Oct 2026'};
+const HOLDINGS=[
+ {sym:'RELIANCE',qty:12,avg:2710,lots:[{d:'11 Oct 2026',q:12,p:2710}]},
+ {sym:'TCS',qty:5,avg:3980,lots:[{d:'07 Oct 2026',q:5,p:3980}]},
+ {sym:'ZOMATO',qty:150,avg:196.4,lots:[{d:'16 Oct 2026',q:50,p:238.2},{d:'02 Oct 2026',q:100,p:175.5}]},
+ {sym:'ITC',qty:40,avg:451,lots:[{d:'09 Oct 2026',q:40,p:451}]}];
+const TXNS=[
+ {id:1043,side:'BUY',sym:'ZOMATO',qty:50,price:238.2,date:'16 Oct 2026'},{id:1042,side:'SELL',sym:'INFY',qty:10,price:1532.0,date:'14 Oct 2026'},
+ {id:1041,side:'BUY',sym:'RELIANCE',qty:12,price:2710.0,date:'11 Oct 2026'},{id:1040,side:'BUY',sym:'ITC',qty:40,price:451.0,date:'09 Oct 2026'},
+ {id:1039,side:'BUY',sym:'TCS',qty:5,price:3980.0,date:'07 Oct 2026'},{id:1038,side:'BUY',sym:'ZOMATO',qty:100,price:175.5,date:'02 Oct 2026'}];
+const BOARD=[{name:'Aarav Mehta',pv:1284000,ret:28.4},{name:'Diya Nair',pv:1196500,ret:19.6},{name:'Safiya Karim',pv:1122300,ret:12.2,me:1},
+ {name:'Kabir Shah',pv:1087000,ret:8.7},{name:'Meera Iyer',pv:1041200,ret:4.1},{name:'Rohan Das',pv:968400,ret:-3.2}];
+const LESSONS=[
+{t:'What is a stock?',m:'3 min',d:'A small slice of ownership in a company, and why its price changes.',
+ intro:'A stock represents a small piece of ownership in a company. When you buy one share, you become a part-owner of that business.',
+ secs:[['Why companies issue stocks','Companies sell shares to raise money for growth, such as building factories or launching products, without taking a loan.'],
+  ['How you can earn','You can earn when the share price rises and you sell for more than you paid. Some companies also pay part of their profit to shareholders as dividends.'],
+  ['Why prices move','Prices change with company results, news and how many people want to buy or sell at any moment.']],
+ key:'A share is a slice of a company. Its price reflects what investors think the company is worth.',
+ quiz:[{q:'What does owning a share mean?',o:['You lent money to the company','You own a small part of the company','You work for the company'],a:1},
+  {q:'Which of these can make you money from a stock?',o:['The price rising above what you paid','The company changing its logo','Having a short ticker symbol'],a:0},
+  {q:'What mainly moves a stock price?',o:['Buyers and sellers (demand and supply)','A fixed price set once a year','The number of letters in its name'],a:0}]},
+{t:'Reading a price chart',m:'5 min',d:'Understand trends, support and resistance at a glance.',
+ intro:'A price chart plots a stock\'s price over time. It helps you see where the price has been and how fast it moves.',
+ secs:[['Trends','An uptrend is a series of higher highs and higher lows. A downtrend is lower highs and lower lows. Sideways means the price stays inside a range.'],
+  ['Support and resistance','Support is a price level where buyers often step in. Resistance is a level where sellers often appear. Prices may bounce at these levels, but they can also break through.'],
+  ['Time frames','A one-day chart shows short-term noise. A one-year chart shows the bigger picture. Check more than one time frame before you decide.']],
+ key:'Charts show history, not the future. Use them to understand trends, not to predict prices.',
+ quiz:[{q:'What is an uptrend?',o:['Higher highs and higher lows','Price staying flat','Only falling prices'],a:0},
+  {q:'Support is a level where...',o:['Sellers usually dominate','Buyers often step in','Trading is paused'],a:1},
+  {q:'Which view shows the bigger picture?',o:['A one-day chart','A one-year chart','A one-minute chart'],a:1}]},
+{t:'Buy vs sell orders',m:'4 min',d:'Market orders, limit orders and what to check before confirming.',
+ intro:'An order is your instruction to buy or sell a stock. The two basic order types are market orders and limit orders.',
+ secs:[['Market order','A market order buys or sells right away at the best available price. It is fast, but the final price can differ slightly from what you saw.'],
+  ['Limit order','A limit order sets the price you are willing to pay or accept. It only runs if the market reaches that price, so it gives you control but may never execute.'],
+  ['Fees and totals','Every trade carries a small fee. Always check the total on the review screen before you confirm.']],
+ key:'Market orders prioritise speed. Limit orders prioritise price.',
+ quiz:[{q:'Which order runs immediately at the current price?',o:['Limit order','Market order','Pending order'],a:1},
+  {q:'What does a limit order give you?',o:['Control over the price','A guaranteed execution','No fees'],a:0},
+  {q:'What should you check before confirming?',o:['The total including fees','Only the stock name','Nothing at all'],a:0}]},
+{t:'Diversification',m:'4 min',d:'Why you should not put all your eggs in one basket.',
+ intro:'Diversification means spreading your money across different stocks and sectors, so one bad result does not hurt your whole portfolio.',
+ secs:[['Do not use one basket','If you hold only one stock and it falls sharply, your whole portfolio falls with it. Several stocks soften that impact.'],
+  ['Mix sectors','Own companies from different sectors, such as banking, IT and energy, because they do not all rise and fall together.'],
+  ['Do not overdo it','Owning too many stocks makes them hard to track. A handful of well-chosen holdings is enough to start.']],
+ key:'Spreading your money reduces risk without requiring you to predict the winners.',
+ quiz:[{q:'What is the main goal of diversification?',o:['Reduce risk','Guarantee profit','Avoid fees'],a:0},
+  {q:'Which portfolio is better diversified?',o:['Five stocks from one sector','Five stocks from different sectors','One stock only'],a:1},
+  {q:'Can you own too many stocks?',o:['No, more is always better','Yes, it becomes hard to track','Only on weekends'],a:1}]},
+{t:'Risk and return',m:'6 min',d:'Why bigger potential gains come with bigger risk.',
+ intro:'Return is the money you gain or lose on an investment. Risk is the chance that the result differs from what you expect, including losing money.',
+ secs:[['The trade-off','Investments with higher potential returns usually come with higher risk. There is no reliable high return without risk.'],
+  ['Know your comfort zone','Your time horizon and how much loss you can tolerate should shape your choices. Short-term goals call for more caution.'],
+  ['Practise first','A simulator lets you test strategies with virtual money, so you can learn from mistakes at no cost.']],
+ key:'Higher potential return usually means higher risk. Match your risk to your goals.',
+ quiz:[{q:'Higher potential returns usually come with...',o:['Lower risk','Higher risk','No risk'],a:1},
+  {q:'What should shape your risk level?',o:['Your goals and time horizon','A friend\'s random tip','The stock\'s symbol'],a:0},
+  {q:'Why use a simulator?',o:['To practise without losing real money','To earn real money','To avoid learning'],a:0}]},
+{t:'Reading your portfolio',m:'5 min',d:'Average price, profit and loss, and allocation explained.',
+ intro:'Your portfolio is the collection of everything you own. Reading it well shows how you are really doing.',
+ secs:[['Average price','Your average price is the typical price you paid per share across all your purchases. It is your break-even point.'],
+  ['Profit and loss (P&L)','P&L is the difference between the current value and what you paid. A positive number is a gain and a negative one is a loss. It stays unrealised until you sell.'],
+  ['Allocation','Allocation shows how your money is split across stocks. If one stock takes up too large a share, consider rebalancing.']],
+ key:'Average price tells you where you break even. P&L tells you where you stand now.',
+ quiz:[{q:'What is your average price?',o:['The typical price you paid per share','Today\'s market price','The highest price ever'],a:0},
+  {q:'When is a gain or loss realised?',o:['When you sell','Whenever the price moves','Every morning'],a:0},
+  {q:'What does allocation show?',o:['How your money is split across stocks','Your login history','The fees you paid'],a:0}]}];
+const _mk=(n,v,c,seed)=>{let d=series(seed,100);if((d[39]>d[0])!==(c>0))d=d.map(x=>200-x);return{n,v,c,d}};
+const INDICES=[_mk('NIFTY 50','22,345.60',.54,5),_mk('SENSEX','73,512.40',.48,9),_mk('BANK NIFTY','47,820.15',-.21,15)];
