@@ -4,7 +4,7 @@
 
 #include <string>
 #include <vector>
-#include "../stock/Stock.h"
+
 #include "Market.h"
 
 class MarketDataService {
@@ -14,12 +14,15 @@ private:
 public:
     explicit MarketDataService(Market& market);
 
-    bool getStock(const std::string& symbol, Stock& result) const;
+    bool getStock(const std::string& symbol,
+                  Stock& result) const;
 
     std::vector<Stock> getAllStocks() const;
 
     bool getCurrentPrice(const std::string& symbol,
                          double& price) const;
+
+    int getStockCount() const;
 };
 
 #endif
