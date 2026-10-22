@@ -9,6 +9,7 @@ Stock::Stock()
       companyName(""),
       sector(""),
       price(0.0),
+      previousClose(0.0),
       dailyChangePercent(0.0),
       priceHistory() {
 }
@@ -20,8 +21,10 @@ Stock::Stock(const std::string& symbol,
       companyName(companyName),
       sector("Other"),
       price(price > 0.0 ? price : 0.0),
+      previousClose(price > 0.0 ? price : 0.0),
       dailyChangePercent(0.0),
       priceHistory() {
+
     if (this->price > 0.0) {
         priceHistory.push_back(this->price);
     }
@@ -37,10 +40,10 @@ Stock::Stock(const std::string& symbol,
       companyName(companyName),
       sector(sector),
       price(price > 0.0 ? price : 0.0),
-      dailyChangePercent(dailyChangePercent),
+      previousClose(0.0),
+      dailyChangePercent(0.0),
       priceHistory(priceHistory) {
 
-    // Remove invalid historical prices.
     std::vector<double> validHistory;
 
     for (double historicalPrice : this->priceHistory) {
@@ -51,13 +54,23 @@ Stock::Stock(const std::string& symbol,
 
     this->priceHistory = validHistory;
 
-    // Keep the latest history point consistent with the current price.
     if (this->price > 0.0) {
         if (this->priceHistory.empty()) {
             this->priceHistory.push_back(this->price);
         } else {
             this->priceHistory.back() = this->price;
         }
+    }
+
+    // Use the supplied daily change to infer the previous close.
+    if (dailyChangePercent > -100.0) {
+        previousClose =
+            this->price / (1.0 + dailyChangePercent / 100.0);
+    }
+
+    if (previousClose > 0.0) {
+        this->dailyChangePercent =
+            ((this->price - previousClose) / previousClose) * 100.0;
     }
 }
 
@@ -76,6 +89,22 @@ std::string Stock::getSector() const {
 double Stock::getPrice() const {
     return price;
 }
+double Stock::getPreviousClose() const {
+    return previousClose;
+}
+
+bool Stock::setPreviousClose(double newPreviousClose) {
+    if (newPreviousClose <= 0.0) {
+        return false;
+    }
+
+    previousClose = newPreviousClose;
+
+    dailyChangePercent =
+        ((price - previousClose) / previousClose) * 100.0;
+
+    return true;
+}
 
 double Stock::getDailyChangePercent() const {
     return dailyChangePercent;
@@ -92,6 +121,11 @@ bool Stock::updatePrice(double newPrice) {
 
     price = newPrice;
     priceHistory.push_back(newPrice);
+
+    if (previousClose > 0.0) {
+        dailyChangePercent =
+            ((price - previousClose) / previousClose) * 100.0;
+    }
 
     return true;
 }
