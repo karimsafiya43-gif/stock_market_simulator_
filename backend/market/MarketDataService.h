@@ -23,6 +23,11 @@ public:
                          double& price) const;
 
     int getStockCount() const;
+    bool getStockSector(const std::string& symbol,
+                    std::string& sector) const;
+
+bool getStockPriceHistory(const std::string& symbol,
+                          std::vector<double>& history) const;
 };
 
 #endif

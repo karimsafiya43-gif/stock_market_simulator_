@@ -1,11 +1,16 @@
 
 #include "Stock.h"
+
 #include <iostream>
 #include <iomanip>
-#include <utility>
 
 Stock::Stock()
-    : symbol(""), companyName(""), price(0.0) {
+    : symbol(""),
+      companyName(""),
+      sector(""),
+      price(0.0),
+      dailyChangePercent(0.0),
+      priceHistory() {
 }
 
 Stock::Stock(const std::string& symbol,
@@ -13,7 +18,47 @@ Stock::Stock(const std::string& symbol,
              double price)
     : symbol(symbol),
       companyName(companyName),
-      price(price >= 0.0 ? price : 0.0) {
+      sector("Other"),
+      price(price > 0.0 ? price : 0.0),
+      dailyChangePercent(0.0),
+      priceHistory() {
+    if (this->price > 0.0) {
+        priceHistory.push_back(this->price);
+    }
+}
+
+Stock::Stock(const std::string& symbol,
+             const std::string& companyName,
+             const std::string& sector,
+             double price,
+             double dailyChangePercent,
+             const std::vector<double>& priceHistory)
+    : symbol(symbol),
+      companyName(companyName),
+      sector(sector),
+      price(price > 0.0 ? price : 0.0),
+      dailyChangePercent(dailyChangePercent),
+      priceHistory(priceHistory) {
+
+    // Remove invalid historical prices.
+    std::vector<double> validHistory;
+
+    for (double historicalPrice : this->priceHistory) {
+        if (historicalPrice > 0.0) {
+            validHistory.push_back(historicalPrice);
+        }
+    }
+
+    this->priceHistory = validHistory;
+
+    // Keep the latest history point consistent with the current price.
+    if (this->price > 0.0) {
+        if (this->priceHistory.empty()) {
+            this->priceHistory.push_back(this->price);
+        } else {
+            this->priceHistory.back() = this->price;
+        }
+    }
 }
 
 std::string Stock::getSymbol() const {
@@ -24,8 +69,20 @@ std::string Stock::getCompanyName() const {
     return companyName;
 }
 
+std::string Stock::getSector() const {
+    return sector;
+}
+
 double Stock::getPrice() const {
     return price;
+}
+
+double Stock::getDailyChangePercent() const {
+    return dailyChangePercent;
+}
+
+std::vector<double> Stock::getPriceHistory() const {
+    return priceHistory;
 }
 
 bool Stock::updatePrice(double newPrice) {
@@ -34,6 +91,38 @@ bool Stock::updatePrice(double newPrice) {
     }
 
     price = newPrice;
+    priceHistory.push_back(newPrice);
+
+    return true;
+}
+
+bool Stock::updateDailyChangePercent(double newChange) {
+    dailyChangePercent = newChange;
+    return true;
+}
+
+bool Stock::setPriceHistory(
+    const std::vector<double>& history) {
+
+    std::vector<double> validHistory;
+
+    for (double historicalPrice : history) {
+        if (historicalPrice <= 0.0) {
+            return false;
+        }
+
+        validHistory.push_back(historicalPrice);
+    }
+
+    if (price > 0.0) {
+        if (validHistory.empty()) {
+            validHistory.push_back(price);
+        } else {
+            validHistory.back() = price;
+        }
+    }
+
+    priceHistory = validHistory;
     return true;
 }
 
@@ -41,6 +130,7 @@ void Stock::displayStock() const {
     std::cout << std::left
               << std::setw(12) << symbol
               << std::setw(28) << companyName
+              << std::setw(16) << sector
               << std::fixed << std::setprecision(2)
               << price << '\n';
 }

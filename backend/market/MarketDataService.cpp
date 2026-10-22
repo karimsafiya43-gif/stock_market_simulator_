@@ -33,3 +33,30 @@ bool MarketDataService::getCurrentPrice(
 int MarketDataService::getStockCount() const {
     return market.getStockCount();
 }
+bool MarketDataService::getStockSector(
+    const std::string& symbol,
+    std::string& sector) const {
+
+    Stock stock;
+
+    if (!market.getStock(symbol, stock)) {
+        return false;
+    }
+
+    sector = stock.getSector();
+    return true;
+}
+
+bool MarketDataService::getStockPriceHistory(
+    const std::string& symbol,
+    std::vector<double>& history) const {
+
+    Stock stock;
+
+    if (!market.getStock(symbol, stock)) {
+        return false;
+    }
+
+    history = stock.getPriceHistory();
+    return true;
+}
