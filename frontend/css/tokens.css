@@ -1,8 +1,0 @@
-:root{
-  --bg:#0a0e1f;--bg2:#10162d;--card:#141b36;--card2:#1a2344;--line:rgba(255,255,255,.08);
-  --text:#eef0fa;--muted:#8f98bd;
-  --accent:#ffb547;--accent-ink:#2a1a00;--lilac:#a78bfa;
-  --up:#2dd4a7;--down:#ff6b7a;
-  --font-d:"Sora",system-ui,sans-serif;--font:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --r-sm:10px;--r:18px;--r-lg:28px;--shadow:0 20px 50px -20px rgba(0,0,0,.6);
-}
