@@ -1,12 +1,63 @@
 // Mock data: replace with real fetch() calls once the backend is ready
 function series(seed,base,n=40){let x=seed,v=base*.9,o=[];for(let i=0;i<n;i++){x=(x*9301+49297)%233280;v+=(x/233280-.45)*base*.022;o.push(v)}const d=base-o[n-1];return o.map(v=>v+d)}
-const _s=(sym,name,sector,price,chg,seed)=>({sym,name,sector,price,chg,data:series(seed,price)});
+
+const LOGOS={
+ RELIANCE:'images/stocks/reliance.png',
+ TCS:'images/stocks/tcs.png',
+ INFY:'images/stocks/infosys.png',
+ HDFCBANK:'images/stocks/hdfc.png',
+ ITC:'images/stocks/itc.png',
+ TATAMOTORS:'images/stocks/tatamotors.png',
+ ZOMATO:'images/stocks/zomato.png',
+ SBIN:'images/stocks/sbi.png',
+ WIPRO:'images/stocks/wipro.png',
+ ADANIENT:'images/stocks/adani.png',
+ BHARTIARTL:'images/stocks/airtel.png',
+ BRITANNIA:'images/stocks/britania.png',
+ HINDUNILVR:'images/stocks/hul.png',
+ KALYANKJIL:'images/stocks/kj.png',
+ MARUTI:'images/stocks/maruti.png',
+ PAYTM:'images/stocks/paytm.png',
+ POLICYBZR:'images/stocks/pb%20fintech.png',
+ SUNPHARMA:'images/stocks/sunpharama.png',
+ SWIGGY:'images/stocks/swiggy.png',
+ TANISHQ:'images/stocks/tanishq.png',
+ TITAN:'images/stocks/titan.png',
+ ZEPTO:'images/stocks/zepto.png',
+ ZOHO:'images/stocks/zoho.png',
+ DRREDDY:'images/stocks/dr. reddy’s.png',
+ JIO:'images/stocks/jio.png',
+ JIOFIN:'images/stocks/jio.png'
+};
+
+const _s=(sym,name,sector,price,chg,seed)=>({sym,name,sector,price,chg,logo:LOGOS[sym]||'',data:series(seed,price)});
 const STOCKS=[
- _s('RELIANCE','Reliance Industries','Energy',2874.5,1.24,11),_s('TCS','Tata Consultancy','IT',3921.1,-0.62,23),
- _s('INFY','Infosys','IT',1544.8,0.88,37),_s('HDFCBANK','HDFC Bank','Banking',1689.3,0.31,41),
- _s('ITC','ITC Limited','FMCG',468.2,-0.45,53),_s('TATAMOTORS','Tata Motors','Auto',972.6,2.17,67),
- _s('ZOMATO','Zomato','Consumer',238.9,3.42,71),_s('SBIN','State Bank of India','Banking',812.4,-1.08,83),
- _s('WIPRO','Wipro','IT',498.7,0.12,97),_s('ADANIENT','Adani Enterprises','Energy',2456.0,-2.31,101)];
+ _s('RELIANCE','Reliance Industries','Energy',2874.5,1.24,11),
+ _s('TCS','Tata Consultancy','IT',3921.1,-0.62,23),
+ _s('INFY','Infosys','IT',1544.8,0.88,37),
+ _s('HDFCBANK','HDFC Bank','Banking',1689.3,0.31,41),
+ _s('ITC','ITC Limited','FMCG',468.2,-0.45,53),
+ _s('TATAMOTORS','Tata Motors','Auto',972.6,2.17,67),
+ _s('ZOMATO','Zomato','Consumer',238.9,3.42,71),
+ _s('SBIN','State Bank of India','Banking',812.4,-1.08,83),
+ _s('WIPRO','Wipro','IT',498.7,0.12,97),
+ _s('ADANIENT','Adani Enterprises','Energy',2456.0,-2.31,101),
+ _s('BHARTIARTL','Bharti Airtel','Telecom',1642.5,1.45,109),
+ _s('BRITANNIA','Britannia','FMCG',5420.0,0.65,113),
+ _s('HINDUNILVR','Hindustan Unilever','FMCG',2380.0,-0.72,127),
+ _s('KALYANKJIL','Kalyan Jewellers','Luxury',685.0,2.80,131),
+ _s('MARUTI','Maruti Suzuki','Auto',11850.0,-0.35,137),
+ _s('PAYTM','Paytm','Fintech',742.0,3.15,151),
+ _s('POLICYBZR','PB Fintech','Fintech',1720.0,1.10,157),
+ _s('SUNPHARMA','Sun Pharma','Pharma',1860.0,0.94,163),
+ _s('SWIGGY','Swiggy','Consumer',485.0,4.20,167),
+ _s('TANISHQ','Tanishq','Luxury',3410.0,0.52,173),
+ _s('TITAN','Titan Company','Luxury',3380.0,-0.40,179),
+ _s('ZEPTO','Zepto','Consumer',310.0,5.60,181),
+ _s('ZOHO','Zoho Corp','IT',2150.0,1.75,193),
+ _s('DRREDDY','Dr. Reddy’s Lab','Pharma',6520.0,1.15,149),
+ _s('JIO','Jio Telecom','Telecom',324.5,2.40,151)
+];
 const USER={name:'Safiya Karim',username:'safiya',email:'safiya@example.com',balance:742500,joined:'Oct 2026'};
 const HOLDINGS=[
  {sym:'RELIANCE',qty:12,avg:2710,lots:[{d:'11 Oct 2026',q:12,p:2710}]},
