@@ -29,7 +29,7 @@ double Stock::getPrice() const {
 }
 
 bool Stock::updatePrice(double newPrice) {
-    if (newPrice < 0.0) {
+    if (newPrice <= 0.0) {
         return false;
     }
 
