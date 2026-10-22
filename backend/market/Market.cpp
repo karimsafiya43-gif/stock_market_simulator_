@@ -1,10 +1,24 @@
 
 #include "Market.h"
 
-#include <algorithm>
 #include <cctype>
+#include <iomanip>
 #include <iostream>
 #include <string>
+
+namespace {
+    std::string normalizeSymbol(const std::string& symbol) {
+        std::string normalized = symbol;
+
+        for (char& ch : normalized) {
+            ch = static_cast<char>(
+                std::toupper(static_cast<unsigned char>(ch))
+            );
+        }
+
+        return normalized;
+    }
+}
 
 bool Market::addStock(const Stock& stock) {
     if (stock.getSymbol().empty() ||
@@ -13,8 +27,11 @@ bool Market::addStock(const Stock& stock) {
         return false;
     }
 
+    const std::string newSymbol =
+        normalizeSymbol(stock.getSymbol());
+
     for (const Stock& existing : stocks) {
-        if (existing.getSymbol() == stock.getSymbol()) {
+        if (normalizeSymbol(existing.getSymbol()) == newSymbol) {
             return false;
         }
     }
@@ -25,8 +42,10 @@ bool Market::addStock(const Stock& stock) {
 
 bool Market::getStock(const std::string& symbol,
                       Stock& result) const {
+    const std::string requestedSymbol = normalizeSymbol(symbol);
+
     for (const Stock& stock : stocks) {
-        if (stock.getSymbol() == symbol) {
+        if (normalizeSymbol(stock.getSymbol()) == requestedSymbol) {
             result = stock;
             return true;
         }
@@ -46,7 +65,8 @@ bool Market::updateStockPrice(const std::string& symbol,
     }
 
     for (Stock& stock : stocks) {
-        if (stock.getSymbol() == symbol) {
+        if (normalizeSymbol(stock.getSymbol()) ==
+            normalizeSymbol(symbol)) {
             return stock.updatePrice(newPrice);
         }
     }
@@ -65,13 +85,18 @@ void Market::displayMarket() const {
     }
 
     std::cout << "\n========== STOCK MARKET ==========\n";
-    std::cout << "Symbol      Company                   Price\n";
-    std::cout << "------------------------------------------\n";
+    std::cout << std::left
+              << std::setw(12) << "Symbol"
+              << std::setw(28) << "Company"
+              << std::setw(16) << "Sector"
+              << "Price\n";
+
+    std::cout << "--------------------------------------------------------\n";
 
     for (const Stock& stock : stocks) {
         stock.displayStock();
     }
 
-    std::cout << "------------------------------------------\n";
+    std::cout << "--------------------------------------------------------\n";
     std::cout << "Total stocks: " << getStockCount() << '\n';
 }

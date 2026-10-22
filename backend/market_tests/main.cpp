@@ -119,5 +119,29 @@ market.addStock(detailedStock);
         std::cout << "WIPRO history lookup failed.\n";
     }
 
+    // Test case-insensitive stock lookup.
+    std::cout << "\nTesting case-insensitive symbols...\n";
+
+    Stock foundStock;
+
+    std::cout << "Lookup tcs: "
+              << market.getStock("tcs", foundStock) << '\n';
+
+    std::cout << "Lookup Tcs: "
+              << market.getStock("Tcs", foundStock) << '\n';
+
+    // Test that a differently-cased duplicate is rejected.
+    Stock duplicateTcs(
+        "tcs",
+        "Duplicate TCS",
+        "IT",
+        3500.0,
+        0.0,
+        std::vector<double>{3400.0, 3500.0}
+    );
+
+    std::cout << "Add lowercase duplicate: "
+              << market.addStock(duplicateTcs) << '\n';
+
     return 0;
 }
