@@ -21,6 +21,15 @@ int main() {
 
 market.updateStockPrice("TCS", 3600.0);
 bool invalidUpdate = market.updateStockPrice("TCS", -100.0);
+bool zeroUpdate = market.updateStockPrice("TCS", 0.0);
+
+std::cout << "Zero price update accepted: "
+          << zeroUpdate << '\n';
+
+if (service.getCurrentPrice("TCS", price)) {
+    std::cout << "TCS price after zero update: "
+              << price << '\n';
+}
 
 std::cout << "Negative price update accepted: "
           << invalidUpdate << '\n';
